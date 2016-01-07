@@ -1,15 +1,15 @@
-# require "zeitungen/version"
-# require "zeitungen/dropbox_client"
-# require "zeitungen/file_client"
-# require "zeitungen/zeitungen"
-# require "zeitungen/index_page"
-# require "zeitungen/downloader"
-# require "zeitungen/password"
-# require "zeitungen/passwords"
+require 'net/http'
+require 'date'
+require 'open-uri'
+require 'fileutils'
+require 'mechanize'
+require 'tempfile'
+require 'dropbox_sdk'
+
 
 %w(
   version
-  zeitungen
+  zeitung
   dropbox_client
   file_client
   index_page
@@ -19,6 +19,3 @@
 ).each { |file| require File.join(File.dirname(__FILE__), 'zeitungen', file) }
 
 include Zeitungen
-# module Zeitung
-#   # Your code goes here...
-# end

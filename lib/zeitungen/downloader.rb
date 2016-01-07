@@ -1,8 +1,8 @@
 module Zeitungen
   class Downloader
-    def initialize(url, zeitungens, client, passwords)
+    def initialize(url, zeitungen, client, passwords)
       @url       = url
-      @zeitungens  = zeitungens
+      @zeitungen  = zeitungen
       @client    = client
       @passwords = passwords
     end
@@ -14,6 +14,7 @@ module Zeitungen
 
       page = IndexPage.new(@url, @passwords)
       zeitungen_links = page.links(date)
+      puts zeitungen_links.inspect
       queue = enqueue(zeitungen_links)
 
       if queue.size==0
@@ -33,7 +34,7 @@ module Zeitungen
 
     def enqueue(zeitungen_links)
       queue = Queue.new
-      @zeitungens.each do |z|
+      @zeitungen.each do |z|
         if link = zeitungen_links.find{|l| z.regexp.match l.text } # se c'è un link per il zeitungen corrente
           z.uri = link.uri+"\?directDownload\=true"   # zeitungen.uri+"\?directDownload\=true"
           filename = filename_w_date(z.final_name) # "Corriere della Sera - 2015-12-23.pdf"
