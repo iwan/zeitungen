@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'zeitung/version'
+require 'zeitungen/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "zeitung"
-  spec.version       = Zeitung::VERSION
+  spec.name          = "zeitungen"
+  spec.version       = Zeitungen::VERSION
   spec.authors       = ["Iwan Buetti"]
   spec.email         = ["iwan.buetti@gmail.com"]
 

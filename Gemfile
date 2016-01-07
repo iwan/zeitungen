@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in zeitung.gemspec
+# Specify your gem's dependencies in zeitungen.gemspec
 gemspec
