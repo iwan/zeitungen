@@ -14,7 +14,6 @@ module Zeitungen
 
       page = IndexPage.new(@url, @passwords)
       zeitungen_links = page.links(date)
-      puts zeitungen_links.inspect
       queue = enqueue(zeitungen_links)
 
       if queue.size==0
