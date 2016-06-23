@@ -11,3 +11,5 @@
 /tmp/
 
 execute.rb
+test_execute.rb
+test_http.rb

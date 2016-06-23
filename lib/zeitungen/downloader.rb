@@ -1,10 +1,11 @@
 module Zeitungen
   class Downloader
-    def initialize(url, zeitungen, client, passwords)
+    def initialize(url, zeitungen, client, passwords, verbose: false)
       @url       = url
-      @zeitungen  = zeitungen
+      @zeitungen = zeitungen
       @client    = client
       @passwords = passwords
+      @verbose   = verbose
     end
     
     def run(date=Date.today, options={})
@@ -14,6 +15,7 @@ module Zeitungen
 
       page = IndexPage.new(@url, @passwords)
       zeitungen_links = page.links(date)
+      puts "zeitungen_links.size: #{zeitungen_links.size}" if @verbose
       # puts zeitungen_links.inspect
       queue = enqueue(zeitungen_links)
 
@@ -37,9 +39,12 @@ module Zeitungen
       @zeitungen.each do |z|
         if link = zeitungen_links.find{|l| z.regexp.match l.text } # se c'è un link per il zeitungen corrente
           uri = link.uri
+          puts "uri: #{uri}" if @verbose
           if uri.host=="t.umblr.com"
             h = Hash[uri.query.split("&").map{|e| e.split("=")}]
-            z.uri = URI(URI.unescape(h["z"])+"\?directDownload\=true")
+            u = URI(URI.unescape(h["z"])+"\?directDownload\=true")
+            puts "u: #{u}" if @verbose
+            z.uri = u
           else
             z.uri = uri+"\?directDownload\=true"   # zeitungen.uri+"\?directDownload\=true"
           end
@@ -56,14 +61,32 @@ module Zeitungen
         Thread.new do    
           while !queue.empty? && z = queue.pop
             begin
-              uri = z.uri
+              url = z.uri
               file = Tempfile.new('zeitungen')
-              Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme=='https') do |http|
-                request = Net::HTTP::Get.new(uri)
-                puts "downloading #{z.final_name} (#{z.uri})..."
-                response = http.request request
-                file.write(response.body)
+
+
+              res = HTTP.get(url)
+              i = 0
+              puts "Response status: #{res.status.to_s}" if @verbose
+              while res.status.to_s=="302 Found" and i<5 # max 5 redirect
+                url = res.headers.get("Location")
+                url = url.first if url.is_a? Array
+                puts "Redirect URL: #{url}" if @verbose
+                res = HTTP.get(url)
+                puts "Response status: #{res.status.to_s}" if @verbose
+                i += 1
               end
+              puts "downloading #{z.final_name} (#{url})..."
+              file.write(res.to_s)
+
+
+              # res = HTTP.get()
+              # Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme=='https') do |http|
+              #   request = Net::HTTP::Get.new(uri)
+              #   puts "downloading #{z.final_name} (#{z.uri})..."
+              #   response = http.request request
+              #   file.write(response.body)
+              # end
 
               filename = filename_w_date(z.final_name)
               z.upload ? @client.mv_file_in_public_dest(filename, file) : @client.mv_file_in_private_dest(filename, file)
