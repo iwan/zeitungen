@@ -35,6 +35,13 @@ module Zeitungen
           all_quotidie_links = page.links.find_all { |link| link.attributes.parent.parent.path == "/html/body/section/section/div/article[#{a}]/div/section[1]/div/div" }
           break if all_quotidie_links.size > 3  
         end
+
+        if all_quotidie_links.size==0
+          [0,1,2,3].each do |a|
+            all_quotidie_links = page.links.find_all { |link| link.attributes.parent.parent.path == "/html/body/section/section/div/div/article[#{a}]/div/section[1]/div/div" }
+            break if all_quotidie_links.size > 3  
+          end
+        end
       end
       puts "Parsing zeitungen page takes #{Time.now-t}s"
       all_quotidie_links  
