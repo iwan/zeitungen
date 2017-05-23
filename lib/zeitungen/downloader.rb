@@ -25,7 +25,7 @@ module Zeitungen
         puts "Start downloading #{queue.size} zeitungen"
       end
       
-      # download(queue, options[:thread_count])
+      download(queue, options[:thread_count])
     end
 
     private
