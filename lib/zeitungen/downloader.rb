@@ -1,10 +1,10 @@
 module Zeitungen
   class Downloader
-    def initialize(url, zeitungen, client, passwords, verbose: false)
+    def initialize(url, zeitungen, client, password, verbose: false)
       @url       = url
       @zeitungen = zeitungen
       @client    = client
-      @passwords = passwords
+      @password  = password
       @verbose   = verbose
     end
     
@@ -13,7 +13,7 @@ module Zeitungen
       @date_string = date.strftime("%Y-%m-%d")
       @client.date_string = @date_string
 
-      page = IndexPage.new(@url, @passwords)
+      page = IndexPage.new(@url, @password)
       zeitungen_links = page.links(date)
       puts "zeitungen_links.size: #{zeitungen_links.size}" if @verbose
       # puts zeitungen_links.inspect
@@ -25,7 +25,7 @@ module Zeitungen
         puts "Start downloading #{queue.size} zeitungen"
       end
       
-      download(queue, options[:thread_count])
+      # download(queue, options[:thread_count])
     end
 
     private

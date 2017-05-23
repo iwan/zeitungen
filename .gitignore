@@ -1,5 +1,6 @@
 *.gem
 *.rbc
+.DS_Store
 /.bundle/
 /.yardoc
 /Gemfile.lock
@@ -10,6 +11,9 @@
 /spec/reports/
 /tmp/
 
-execute.rb
 test_execute.rb
 test_http.rb
+
+execute_1.rb
+execute_2.rb
+

@@ -1,8 +1,8 @@
 module Zeitungen
   class IndexPage
-    def initialize(url, passwords)
+    def initialize(url, password)
       @url       = url
-      @passwords = passwords
+      @password = password
     end
     
     def links(date)
@@ -17,8 +17,8 @@ module Zeitungen
       agent.get(@url) do |page|
         
         # compilo form autenticazione
-        form = page.forms.first
-        form.password = @passwords.get(date.year, date.month)
+        form          = page.forms.first
+        form.password = @password
         
         # non so perche arriva un'altro form precompilato 
         form2 = agent.submit(form).forms.first
@@ -29,6 +29,11 @@ module Zeitungen
         # finalmente l'url della pagina con la lista dei quotidiani
         rgxp = Regexp.new("^"+date.strftime("%d.%m.%Y"))
         page = quotidie_page
+        # puts page
+        # exit
+        puts "-----"
+        puts page.links.map{|l| "#{l} -> #{l.attributes.parent.parent.path}"}.inspect
+        # /html/body/section/section/div/div[1]/article[1]/div/section[1]/div/div
 
         # tutti i link utili
         [0,1,2,3].each do |a|
@@ -39,6 +44,16 @@ module Zeitungen
         if all_quotidie_links.size==0
           [0,1,2,3].each do |a|
             all_quotidie_links = page.links.find_all { |link| link.attributes.parent.parent.path == "/html/body/section/section/div/div/article[#{a}]/div/section[1]/div/div" }
+            break if all_quotidie_links.size > 3  
+          end
+        end
+        if all_quotidie_links.size==0
+          [0,1,2,3].each do |a|
+            all_quotidie_links = page.links.find_all do |link|
+
+              link.attributes.parent.parent.path == "/html/body/section/section/div/div[1]/article[#{a}]/div/section[1]/div/div"
+
+            end
             break if all_quotidie_links.size > 3  
           end
         end

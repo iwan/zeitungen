@@ -1,4 +1,6 @@
+# http://dropbox.github.io/dropbox-sdk-ruby/api-docs/v1.6.4/DropboxClient.html
 class DropboxClient
+
   attr_accessor :date_string
 
   def public_dest_path(filename)
