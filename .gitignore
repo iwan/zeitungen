@@ -17,3 +17,5 @@ test_http.rb
 execute_1.rb
 execute_2.rb
 
+.env.prod
+
