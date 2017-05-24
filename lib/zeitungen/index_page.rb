@@ -31,8 +31,7 @@ module Zeitungen
         page = quotidie_page
         # puts page
         # exit
-        puts "-----"
-        puts page.links.map{|l| "#{l} -> #{l.attributes.parent.parent.path}"}.inspect
+        # puts page.links.map{|l| "#{l} -> #{l.attributes.parent.parent.path}"}.inspect
         # /html/body/section/section/div/div[1]/article[1]/div/section[1]/div/div
 
         # tutti i link utili
@@ -50,9 +49,7 @@ module Zeitungen
         if all_quotidie_links.size==0
           [0,1,2,3].each do |a|
             all_quotidie_links = page.links.find_all do |link|
-
               link.attributes.parent.parent.path == "/html/body/section/section/div/div[1]/article[#{a}]/div/section[1]/div/div"
-
             end
             break if all_quotidie_links.size > 3  
           end

@@ -1,12 +1,13 @@
 module Zeitungen
   class Zeitung
     attr_accessor :uri
-    attr_reader :final_name, :regexp, :upload
-    def initialize(final_name, regexp, upload=false)
+    attr_reader :final_name, :regexp, :upload, :but_not
+    def initialize(final_name, regexp, upload: false, but_not: nil)
       @final_name = final_name
       @regexp = regexp
       @upload = upload
       @uri = nil
+      @but_not = but_not
     end
 
 

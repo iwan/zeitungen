@@ -37,20 +37,35 @@ module Zeitungen
     def enqueue(zeitungen_links)
       queue = Queue.new
       @zeitungen.each do |z|
-        if link = zeitungen_links.find{|l| z.regexp.match l.text } # se c'è un link per il zeitungen corrente
-          uri = link.uri
-          puts "uri: #{uri}" if @verbose
-          if uri.host=="t.umblr.com"
-            h = Hash[uri.query.split("&").map{|e| e.split("=")}]
-            u = URI(URI.unescape(h["z"])+"\?directDownload\=true")
-            puts "u: #{u}" if @verbose
-            z.uri = u
-          else
-            z.uri = uri+"\?directDownload\=true"   # zeitungen.uri+"\?directDownload\=true"
+        if (links = zeitungen_links.find_all{|l| z.regexp.match l.text }).any? # se c'è un link per il zeitungen corrente
+          if links.size==1
+            link = links.first
+          else # links.size>2
+            if z.but_not
+              if (links = links.reject{|l| z.but_not.match l.text}).any?
+                link = links.first
+              else
+                link = nil
+              end
+            else
+              link = links.first
+            end
           end
-          filename = filename_w_date(z.final_name) # "Corriere della Sera - 2015-12-23.pdf"
+          if link
+            uri = link.uri
+            puts "uri: #{uri.inspect}" if @verbose
+            if uri.host=="t.umblr.com"
+              h = Hash[uri.query.split("&").map{|e| e.split("=")}]
+              u = URI(URI.unescape(h["z"])+"\?directDownload\=true")
+              puts "u: #{u}" if @verbose
+              z.uri = u
+            else
+              z.uri = uri+"\?directDownload\=true"   # zeitungen.uri+"\?directDownload\=true"
+            end
+            filename = filename_w_date(z.final_name) # "Corriere della Sera - 2015-12-23.pdf"
 
-          queue << z if !(@client.exist_in_public_dest?(filename) || @client.exist_in_private_dest?(filename))
+            queue << z if !(@client.exist_in_public_dest?(filename) || @client.exist_in_private_dest?(filename))            
+          end
         end
       end
       queue
