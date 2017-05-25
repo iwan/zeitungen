@@ -11,8 +11,9 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN bundle install
 
+RUN crontab -l > thecrontab
+RUN echo "0,30 6,7,8,9 * * * '/usr/src/app/bin/exe'" >> thecrontab
+RUN echo "" >> thecrontab
+RUN crontab thecrontab
 
-
-# RUN git clone https://github.com/iwan/zeitungen.git
-# WORKDIR /usr/src/app/zeitungen
-
+CMD crond

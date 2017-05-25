@@ -43,4 +43,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mechanize"
   spec.add_dependency "dropbox-sdk"
   spec.add_dependency "http"
+  spec.add_dependency "whenever"
 end
