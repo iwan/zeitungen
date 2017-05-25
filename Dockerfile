@@ -9,8 +9,6 @@ RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . /usr/src/app
-RUN pwd
-RUN ls -la
 RUN bundle install
 
 
