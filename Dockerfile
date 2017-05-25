@@ -16,4 +16,4 @@ RUN echo "0,30 6,7,8,9 * * * '/usr/src/app/bin/exe'" >> thecrontab
 RUN echo "" >> thecrontab
 RUN crontab thecrontab
 
-CMD crond
+CMD crond -f
