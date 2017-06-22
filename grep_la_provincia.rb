@@ -68,7 +68,7 @@ end
 
 
 
-_4sync_precari_url_id = ENV["_4SYNC_PRECARI_URL_ID"] || "ixokyaY5"
+_4sync_precari_url_id = ENV["_4SYNC_PRECARI_URL_ID"]
 agent = Mechanize.new { |a| a.user_agent_alias = 'Mac Safari' }
 
 zeitung = {}
