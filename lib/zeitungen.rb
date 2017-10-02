@@ -4,7 +4,7 @@ require 'open-uri'
 require 'fileutils'
 require 'mechanize'
 require 'tempfile'
-require 'dropbox_sdk'
+require 'dropbox'
 require 'http'
 
 

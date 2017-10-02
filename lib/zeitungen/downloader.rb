@@ -52,19 +52,24 @@ module Zeitungen
             end
           end
           if link
-            uri = link.uri
-            puts "uri: #{uri.inspect}" if @verbose
-            if uri.host=="t.umblr.com"
-              h = Hash[uri.query.split("&").map{|e| e.split("=")}]
-              u = URI(URI.unescape(h["z"])+"\?directDownload\=true")
-              puts "u: #{u}" if @verbose
-              z.uri = u
-            else
-              z.uri = uri+"\?directDownload\=true"   # zeitungen.uri+"\?directDownload\=true"
-            end
-            filename = filename_w_date(z.final_name) # "Corriere della Sera - 2015-12-23.pdf"
+            begin
+              uri = link.uri
+              puts "uri: #{uri.inspect}" if @verbose
+              if uri.host=="t.umblr.com"
+                h = Hash[uri.query.split("&").map{|e| e.split("=")}]
+                u = URI(URI.unescape(h["z"])+"\?directDownload\=true")
+                puts "u: #{u}" if @verbose
+                z.uri = u
+              else
+                z.uri = uri+"\?directDownload\=true"   # zeitungen.uri+"\?directDownload\=true"
+              end
+              filename = filename_w_date(z.final_name) # "Corriere della Sera - 2015-12-23.pdf"
 
-            queue << z if !(@client.exist_in_public_dest?(filename) || @client.exist_in_private_dest?(filename))            
+              queue << z if !(@client.exist_in_public_dest?(filename) || @client.exist_in_private_dest?(filename))                          
+            rescue Exception => e
+              puts "Something went wrong..."
+              puts e.to_s
+            end
           end
         end
       end

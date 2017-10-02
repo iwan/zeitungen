@@ -26,7 +26,7 @@ zeitungs << Zeitung.new("Manifesto", /manifesto/i, upload: true)
 url        = ENV["URL"]
 year_month = Date.today.strftime("%Y%m") # "201705"
 password   = ENV["PWD_#{year_month}"]
-client     = DropboxClient.new(ENV["ZEITUNG_DB_ACCESS_TOKEN"], "dropbox")
+client     = Dropbox::Client.new(ENV["ZEITUNG_DB_ACCESS_TOKEN"])
 puts "url: #{url.inspect}"
 
 

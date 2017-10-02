@@ -41,7 +41,7 @@ Gem::Specification.new do |spec|
   # spec.add_development_dependency "coveralls"
 
   spec.add_dependency "mechanize"
-  spec.add_dependency "dropbox-sdk"
+  spec.add_dependency "dropbox-sdk-v2"
   spec.add_dependency "http"
   spec.add_dependency "whenever"
   spec.add_dependency "pdf-reader"
